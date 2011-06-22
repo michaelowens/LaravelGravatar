@@ -85,7 +85,7 @@ class Gravatar
 	 * @param string $email - The email to get the gravatar for.
 	 * @return string - The XHTML-safe URL to the gravatar.
 	 */
-	public static function buildGravatarURL( $email, $force_secure = false )
+	public static function buildGravatarURL( $email, $size = null, $force_secure = false )
 	{
 		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
 		if( self::usingSecureImages( ) || $force_secure )
@@ -105,7 +105,7 @@ class Gravatar
 		{
 			// Time to figure out our request params
 			$params = array();
-			$params[] = 's=' . self::getAvatarSize( );
+			$params[] = 's=' . ( is_null( $size ) ? self::getAvatarSize( ) : $size );
 			$params[] = 'r=' . self::getMaxRating( );
 			if( self::getDefaultImage( ) )
 			{
@@ -134,33 +134,33 @@ class Gravatar
 	/**
 	 * Get the gravatar
 	 */
-	public static function get( $email )
+	public static function get( $email, $size = null )
 	{
-		return self::buildGravatarURL( $email );
+		return self::buildGravatarURL( $email, $size );
 	}
 	
 	/**
 	 * Get the gravatar with forced secure connection
 	 */
-	public static function get_secure( $email )
+	public static function get_secure( $email, $size = null )
 	{
-		return self::buildGravatarURL( $email, true );
+		return self::buildGravatarURL( $email, $size, true );
 	}
 	
 	/**
 	 * Get the gravatar and return as image
 	 */
-	public static function get_image( $email )
+	public static function get_image( $email, $size = null )
 	{
-		return HTML::image( self::buildGravatarURL( $email ) );
+		return HTML::image( self::buildGravatarURL( $email, $size ) );
 	}
 	
 	/**
 	 * Get the gravatar with forced secure connection and return as image
 	 */
-	public static function get_secure_image( $email )
+	public static function get_secure_image( $email, $size = null )
 	{
-		return HTML::image( self::buildGravatarURL( $email, true ) );
+		return HTML::image( self::buildGravatarURL( $email, $size, true ) );
 	}
 	
 }
