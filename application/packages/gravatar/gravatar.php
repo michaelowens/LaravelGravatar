@@ -7,6 +7,7 @@
  * @copyright	(c) 2011 - Michael John Owens
  */
 
+use System\Config;
 use System\HTML;
 
 class Gravatar
@@ -42,14 +43,14 @@ class Gravatar
 	const HTTP_URL = 'http://www.gravatar.com/avatar/';
 	const HTTPS_URL = 'https://secure.gravatar.com/avatar/';
 	/**#@-*/
-
+	
 	/**
 	 * Get the currently set avatar size.
 	 * @return integer - The current avatar size in use.
 	 */
 	public static function getAvatarSize( )
 	{
-		return self::$size;
+		return ( Config::has( 'gravatar.size' ) ) ? Config::get( 'gravatar.size' ) : self::$size;
 	}
 
 	/**
@@ -58,7 +59,7 @@ class Gravatar
 	 */
 	public static function getDefaultImage( )
 	{
-		return self::$default_image;
+		return ( Config::has( 'gravatar.default_image' ) ) ? Config::get( 'gravatar.default_image' ) : self::$default_image;
 	}
 
 	/**
@@ -67,7 +68,7 @@ class Gravatar
 	 */
 	public static function getMaxRating( )
 	{
-		return self::$max_rating;
+		return ( Config::has( 'gravatar.max_rating' ) ) ? Config::get( 'gravatar.max_rating' ) : self::$max_rating;
 	}
 
 	/**
@@ -76,7 +77,7 @@ class Gravatar
 	 */
 	public static function usingSecureImages( )
 	{
-		return self::$use_secure_url;
+		return ( Config::has( 'gravatar.use_secure_url' ) ) ? Config::get( 'gravatar.use_secure_url' ) : self::$use_secure_url;
 	}
 
 	/**
@@ -84,10 +85,10 @@ class Gravatar
 	 * @param string $email - The email to get the gravatar for.
 	 * @return string - The XHTML-safe URL to the gravatar.
 	 */
-	public static function buildGravatarURL( $email )
+	public static function buildGravatarURL( $email, $force_secure = false )
 	{
 		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
-		if( self::usingSecureImages( ) )
+		if( self::usingSecureImages( ) || $force_secure )
 		{
 			$url = static::HTTPS_URL;
 		}
@@ -139,11 +140,27 @@ class Gravatar
 	}
 	
 	/**
+	 * Get the gravatar with forced secure connection
+	 */
+	public static function get_secure( $email )
+	{
+		return self::buildGravatarURL( $email, true );
+	}
+	
+	/**
 	 * Get the gravatar and return as image
 	 */
 	public static function get_image( $email )
 	{
 		return HTML::image( self::buildGravatarURL( $email ) );
+	}
+	
+	/**
+	 * Get the gravatar with forced secure connection and return as image
+	 */
+	public static function get_secure_image( $email )
+	{
+		return HTML::image( self::buildGravatarURL( $email, true ) );
 	}
 	
 }
