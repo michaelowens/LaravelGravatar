@@ -150,17 +150,17 @@ class Gravatar
 	/**
 	 * Get the gravatar and return as image
 	 */
-	public static function get_image( $email, $size = null )
+	public static function get_image( $email, $size = null, $alt = '', $attributes = array() )
 	{
-		return HTML::image( self::buildGravatarURL( $email, $size ) );
+		return HTML::image( self::buildGravatarURL( $email, $size ), $alt, $attributes );
 	}
 	
 	/**
 	 * Get the gravatar with forced secure connection and return as image
 	 */
-	public static function get_secure_image( $email, $size = null )
+	public static function get_secure_image( $email, $size = null, $alt = '', $attributes = array() )
 	{
-		return HTML::image( self::buildGravatarURL( $email, $size, true ) );
+		return HTML::image( self::buildGravatarURL( $email, $size, true ), $alt, $attributes );
 	}
 	
 }
